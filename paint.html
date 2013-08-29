@@ -67,8 +67,8 @@
 				context.closePath();
 
 				//Update points
-				pointers[event.pointerId].shift();
-				pointers[event.pointerId].push({x: event.offsetX, y: event.offsetY});
+				pointers.shift();
+				pointers.push({x: event.offsetX, y: event.offsetY});
 			}
 		}
 	</script>
