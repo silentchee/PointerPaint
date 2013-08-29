@@ -21,13 +21,11 @@
 	    var colors = ["red", "blue", "green", "yellow", "black", "orange"];
 
 		if (navigator.pointerEnabled) {
-			alert('pointerEnabled');
 			canvas.addEventListener("pointerdown", startPaint);
 			canvas.addEventListener("pointermove", paint);
 			canvas.addEventListener("pointerup", endPaint);
 			canvas.addEventListener("pointercancel", endPaint);	
 		} else if (navigator.msPointerEnabled) {
-			alert('msPointerEnabled');
 			canvas.addEventListener("MSPointerDown", startPaint);
 			canvas.addEventListener("MSPointerMove", paint);
 			canvas.addEventListener("MSPointerUp", endPaint);
@@ -35,37 +33,34 @@
 		}
 
 		function startPaint(event) {
-			// Set up a running list of points
-			pointers = [{x: event.offsetX, y: event.offsetY}, 
+			//Set up a running list of points
+			pointers[event.pointerId] = [{x: event.offsetX, y: event.offsetY}, 
 	                                     {x: event.offsetX, y: event.offsetY}, 
 	                                     {x: event.offsetX, y: event.offsetY}, 
 	                                     {x: event.offsetX, y: event.offsetY}];
 		}
 		
 		function endPaint(event) {
-			delete pointers;
+			delete pointers[event.pointerId];
 		}
 
 		function paint(event) {
 			if (event.buttons > 0) {
 				event.preventDefault();
-
-				var points = pointers;
-
+				//Get points for this pointerId
+				var points = pointers[event.pointerId];
 				//Create path
 				context.beginPath();
 				context.moveTo(points[0].x, points[0].y);
 				context.bezierCurveTo(	points[1].x, points[1].y, 
 	                                    points[2].x, points[2].y, 
 	                                    points[3].x, points[3].y);		
-
 				//Paint path
 				context.lineWidth = (event.width + event.height)*3 || event.pressure*10 || 4; //Use touch geometry, pen pressure, or a default width
 				console.log("w:" + event.width + " h:" + event.height + " p:" + event.pressure);
 				context.strokeStyle = colors[event.pointerId%colors.length];
 				context.stroke();
 				context.closePath();
-
 				//Update points
 				pointers[event.pointerId].shift();
 				pointers[event.pointerId].push({x: event.offsetX, y: event.offsetY});
