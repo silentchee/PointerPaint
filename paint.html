@@ -60,7 +60,7 @@
 	                                    points[3].x, points[3].y);		
 
 				//Paint path
-				context.lineWidth = (event.width + event.height)*3 || event.pressure*10 || 4; //Use touch geometry, pen pressure, or a default width
+				context.lineWidth = 4;
 				console.log("w:" + event.width + " h:" + event.height + " p:" + event.pressure);
 				context.strokeStyle = colors[event.pointerId%colors.length];
 				context.stroke();
