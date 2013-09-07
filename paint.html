@@ -1,9 +1,16 @@
 <!doctype html>
 <html>
 <head>
-    <title>Paint</title>
+    <title>Canvas Action</title>
 </head>
 <body>
+	<style>
+		canvas {
+			-ms-touch-action: none;
+			touch-action: none;
+		}
+	</style>
+
 	<canvas id=canvas width=800 height=600 style="border: 2px solid #333"></canvas>
 	
 	<script type='text/javascript'>
