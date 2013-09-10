@@ -1,9 +1,10 @@
 <!doctype html>
 <html>
-<head>
-    <title>Canvas Action</title>
-</head>
-<body>
+  <head>
+    <title>Paint</title>
+  </head>
+  <body>
+
 	<style>
 		canvas {
 			-ms-touch-action: none;
@@ -11,33 +12,27 @@
 		}
 	</style>
 
-	<canvas id=canvas width=800 height=600 style="border: 2px solid #333"></canvas>
+	<canvas id=canvas width="800" height="600" style="border: 2px solid #333"></canvas>
 	
-	<script type='text/javascript'>
+	<script type="text/javascript">
 	
 	    var canvas = document.getElementById("canvas");
 	    var context = canvas.getContext("2d");
 	    var pointers = [];
-	    var colors = ["red", "blue", "green", "yellow", "black", "orange"];
 
-		if (navigator.pointerEnabled) {
-			canvas.addEventListener("pointerdown", startPaint);
-			canvas.addEventListener("pointermove", paint);
-			canvas.addEventListener("pointerup", endPaint);
-			canvas.addEventListener("pointercancel", endPaint);	
-		} else if (navigator.msPointerEnabled) {
-			canvas.addEventListener("MSPointerDown", startPaint);
-			canvas.addEventListener("MSPointerMove", paint);
-			canvas.addEventListener("MSPointerUp", endPaint);
-			canvas.addEventListener("MSPointerCancel", endPaint);
+		if (navigator.pointerEnabled || navigator.msPointerEnabled) {
+			canvas.addEventListener(navigator.pointerEnabled ? "pointerdown" : "MSPointerDown", startPaint);
+			canvas.addEventListener(navigator.pointerEnabled ? "pointermove" : "MSPointerMove", paint);
+			canvas.addEventListener(navigator.pointerEnabled ? "pointerup" : "MSPointerUp", endPaint);
+			canvas.addEventListener(navigator.pointerEnabled ? "pointercancel" : "MSPointerCancel", endPaint);	
 		}
 
 		function startPaint(event) {
 			// Set up a running list of points
-			pointers = [{x: event.offsetX, y: event.offsetY}, 
-	                                     {x: event.offsetX, y: event.offsetY}, 
-	                                     {x: event.offsetX, y: event.offsetY}, 
-	                                     {x: event.offsetX, y: event.offsetY}];
+			pointers = [ {x: event.offsetX, y: event.offsetY}, 
+	                     {x: event.offsetX, y: event.offsetY}, 
+	                     {x: event.offsetX, y: event.offsetY}, 
+	                     {x: event.offsetX, y: event.offsetY} ];
 		}
 		
 		function endPaint(event) {
@@ -59,8 +54,7 @@
 
 				//Paint path
 				context.lineWidth = 4;
-				console.log("w:" + event.width + " h:" + event.height + " p:" + event.pressure);
-				context.strokeStyle = colors[event.pointerId%colors.length];
+				context.strokeStyle = "red";
 				context.stroke();
 				context.closePath();
 
@@ -69,6 +63,7 @@
 				pointers.push({x: event.offsetX, y: event.offsetY});
 			}
 		}
+		
 	</script>
-</body>
+  </body>
 </html>

@@ -1,9 +1,9 @@
 <!doctype html>
 <html>
-<head>
+  <head>
     <title>Multitouch</title>
-</head>
-<body>
+  </head>
+  <body>
 	<style>
 		canvas {
 			-ms-touch-action: none;
@@ -20,16 +20,11 @@
 	    var pointers = [];
 	    var colors = ["red", "blue", "green", "yellow", "black", "orange"];
 
-		if (navigator.pointerEnabled) {
-			canvas.addEventListener("pointerdown", startPaint);
-			canvas.addEventListener("pointermove", paint);
-			canvas.addEventListener("pointerup", endPaint);
-			canvas.addEventListener("pointercancel", endPaint);	
-		} else if (navigator.msPointerEnabled) {
-			canvas.addEventListener("MSPointerDown", startPaint);
-			canvas.addEventListener("MSPointerMove", paint);
-			canvas.addEventListener("MSPointerUp", endPaint);
-			canvas.addEventListener("MSPointerCancel", endPaint);
+		if (navigator.pointerEnabled || navigator.msPointerEnabled) {
+			canvas.addEventListener(navigator.pointerEnabled ? "pointerdown" : "MSPointerDown", startPaint);
+			canvas.addEventListener(navigator.pointerEnabled ? "pointermove" : "MSPointerMove", paint);
+			canvas.addEventListener(navigator.pointerEnabled ? "pointerup" : "MSPointerUp", endPaint);
+			canvas.addEventListener(navigator.pointerEnabled ? "pointercancel" : "MSPointerCancel", endPaint);	
 		}
 
 		function startPaint(event) {
@@ -67,5 +62,5 @@
 			}
 		}
 	</script>
-</body>
+  </body>
 </html>
