@@ -1,69 +1,72 @@
 <!doctype html>
-<html>
+ <html>
+
   <head>
     <title>Paint</title>
   </head>
+
   <body>
 
-	<style>
-		canvas {
-			-ms-touch-action: none;
-			touch-action: none;
-		}
-	</style>
+    <style>
+      canvas {
+        -ms-touch-action: none;
+        touch-action: none;
+      }
+    </style>
 
-	<canvas id=canvas width="800" height="600" style="border: 2px solid #333"></canvas>
-	
-	<script type="text/javascript">
-	
-	    var canvas = document.getElementById("canvas");
-	    var context = canvas.getContext("2d");
-	    var pointers = [];
+    <canvas id=canvas width="800" height="600" style="border: 2px solid #333"></canvas>
+    
+    <script type="text/javascript">
+        var canvas = document.getElementById("canvas");
+        var context = canvas.getContext("2d");
+        var pointers = [];
 
-		if (navigator.pointerEnabled || navigator.msPointerEnabled) {
-			canvas.addEventListener(navigator.pointerEnabled ? "pointerdown" : "MSPointerDown", startPaint);
-			canvas.addEventListener(navigator.pointerEnabled ? "pointermove" : "MSPointerMove", paint);
-			canvas.addEventListener(navigator.pointerEnabled ? "pointerup" : "MSPointerUp", endPaint);
-			canvas.addEventListener(navigator.pointerEnabled ? "pointercancel" : "MSPointerCancel", endPaint);	
-		}
+        if (navigator.pointerEnabled || navigator.msPointerEnabled) {
+            canvas.addEventListener(navigator.pointerEnabled ? "pointerdown"   : "MSPointerDown",   startPaint);
+            canvas.addEventListener(navigator.pointerEnabled ? "pointermove"   : "MSPointerMove",   paint);
+            canvas.addEventListener(navigator.pointerEnabled ? "pointerup"     : "MSPointerUp",     endPaint);
+            canvas.addEventListener(navigator.pointerEnabled ? "pointercancel" : "MSPointerCancel", endPaint);  
+        }
 
-		function startPaint(event) {
-			// Set up a running list of points
-			pointers = [ {x: event.offsetX, y: event.offsetY}, 
-	                     {x: event.offsetX, y: event.offsetY}, 
-	                     {x: event.offsetX, y: event.offsetY}, 
-	                     {x: event.offsetX, y: event.offsetY} ];
-		}
-		
-		function endPaint(event) {
-			delete pointers;
-		}
+        function startPaint(event) {
+            // Set up a running list of points to use to draw a curve.
 
-		function paint(event) {
-			if (event.buttons > 0) {
-				event.preventDefault();
+            pointers = [ {x: event.offsetX, y: event.offsetY}, 
+                         {x: event.offsetX, y: event.offsetY}, 
+                         {x: event.offsetX, y: event.offsetY},
+                         {x: event.offsetX, y: event.offsetY} ];
+        }
+        
+        function endPaint(event) {
+            delete pointers;
+        }
 
-				var points = pointers;
+        function paint(event) {
+            if (event.buttons > 0) {
+                event.preventDefault();
 
-				//Create path
-				context.beginPath();
-				context.moveTo(points[0].x, points[0].y);
-				context.bezierCurveTo(	points[1].x, points[1].y, 
-	                                    points[2].x, points[2].y, 
-	                                    points[3].x, points[3].y);		
+                var points = pointers;
 
-				//Paint path
-				context.lineWidth = 4;
-				context.strokeStyle = "red";
-				context.stroke();
-				context.closePath();
+                // Create drawing path
+                context.beginPath();
+                context.moveTo(points[0].x, points[0].y);
+                context.bezierCurveTo(
+                    points[1].x, points[1].y, 
+                    points[2].x, points[2].y, 
+                    points[3].x, points[3].y
+                );      
 
-				//Update points
-				pointers.shift();
-				pointers.push({x: event.offsetX, y: event.offsetY});
-			}
-		}
-		
-	</script>
+                // Paint path
+                context.lineWidth = 4;
+                context.strokeStyle = "red";
+                context.stroke();
+                context.closePath();
+
+                // Update point list: remove oldest and add newest point.
+                pointers.shift();
+                pointers.push({x: event.offsetX, y: event.offsetY});
+            }
+        }
+    </script>
   </body>
 </html>
